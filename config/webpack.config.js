@@ -8,7 +8,13 @@ const resolve = (dir) => path.join(__dirname, '..', dir);
 
 module.exports = (env, options) => {
   const config = {
-    entry: resolve('./src/main.js'),
+    resolve: {
+      alias: {
+        vue$: 'vue/dist/vue.esm.js',
+      },
+      extensions: ['*', '.js', '.vue', '.json'],
+    },
+    entry: ['@babel/polyfill', resolve('./src/main.js')],
     output: {
       filename: 'bundle.js',
       path: resolve('./dist'),
@@ -56,11 +62,12 @@ module.exports = (env, options) => {
           exclude: /node_modules/,
         },
         {
-          test: /\.css$/,
+          test: /\.(css|sass|scss)$/,
           use: [
             'vue-style-loader',
             MiniCssExtractPlugin.loader,
             'css-loader',
+            'sass-loader',
           ],
         },
         {
